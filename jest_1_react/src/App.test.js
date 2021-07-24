@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import App from "./App";
+import App, { replaceCamelWithSpaces } from "./App";
 
 // test("renders learn react link", () => {
 //   // render(<App />);
@@ -23,7 +23,7 @@ test("button has correct initial color", () => {
   expect(colorButton).toHaveStyle({ backgroundColor: "blue" });
 
   // expectation: button text = "Changed to red"
-  expect(colorButton.textContent).toBe("Change to red");
+  expect(colorButton).toHaveTextContent("Change to red");
 });
 
 //  no needed because we are finding it by initial color - by text
@@ -59,9 +59,8 @@ test("Disabling button", () => {
   fireEvent.click(checkbox);
 
   //check test if button is disabled
-  expect(colorButton).not.toBeEnabled();
+  // expect(colorButton).not.toBeEnabled();
   expect(colorButton).toBeDisabled();
-
 
   // event click on checkbox
   fireEvent.click(checkbox);
@@ -76,18 +75,38 @@ test("Disabling button", () => {
 
   // checking if button changed
   expect(colorButton).toHaveStyle({ backgroundColor: "gray" });
-  expect(colorButton.textContent).toBe("Change to blue");
+  expect(colorButton).toHaveTextContent("Change to blue");
 });
 
 test("Disabled button has gray color", () => {
-  render(<App />)
+  render(<App />);
   const colorButton = screen.getByRole("button", { name: "Change to blue" });
   const checkbox = screen.getByRole("checkbox", { name: "Disable button" });
 
-  expect(colorButton).toHaveStyle({backgroundColor: "red"})
+  expect(colorButton).toHaveStyle({ backgroundColor: "red" });
 
-  fireEvent.click(checkbox)
+  fireEvent.click(checkbox);
 
-  expect(colorButton).toHaveStyle({backgroundColor: "gray"})
+  expect(colorButton).toHaveStyle({ backgroundColor: "gray" });
+});
 
-})
+// Unit testing if the test of component would be to complicated and
+// there would be a lot of edges
+// Medium Violet Red
+// MidnightBlue
+
+describe("spaces before camel-case capital letters", () => {
+  test("Works for no inner capital letters", () => {
+    expect(replaceCamelWithSpaces("Red")).toBe("Red");
+  });
+
+  test("Works for one inner capital letter", () => {
+    expect(replaceCamelWithSpaces("MidnightBlue")).toBe("Midnight Blue");
+  });
+
+  test("Works for multiple inner capital letters", () => {
+    expect(replaceCamelWithSpaces("MidnightVioletRed")).toBe(
+      "Midnight Violet Red"
+    );
+  });
+});
