@@ -16,15 +16,17 @@ function App() {
       <button
         onClick={handler}
         disabled={checked}
-        style={{ backgroundColor: bColor }}
+        style={{ backgroundColor: checked ?  "gray" : bColor }}
       >
         Change to {newColor}
       </button>
       <input
         type="checkbox"
+        id="disable-button-checkbox"
         defaultChecked={checked}
         onChange={checkerHandler}
       />
+      <label htmlFor="disable-button-checkbox">Disable button</label>
     </div>
   );
 }
