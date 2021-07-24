@@ -31,3 +31,5 @@ yarn-error.log*
 /sundaes-on-demand/.vscode
 /sundaes-on-demand/.eslintcache
 /sundaes-on-demand/node_modules
+
+sundea-server/node_modules
