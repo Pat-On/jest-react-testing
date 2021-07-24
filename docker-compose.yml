@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  web1:
+    build: ./jest_1_react
+    ports:
+      - "3000:3000"
+
+  web2:
+    build: ./sundaes-on-demand
+    ports:
+      - "3010:3010"
+
+        #  backend
+    links:
+      - api
+
+  api:
+    build: ./sundae-server
+    ports:
+      - "8080:3030"
