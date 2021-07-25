@@ -7,6 +7,10 @@ import '@testing-library/jest-dom';
 // added v 47
 // related to MSW from their page
 
+// IMPORTANT
+// WE ARE NOT MAKING THE MSW IN TEST THEY ARE HANDLED IN HERE IN SETUP FILE
+// OPTION COMPONENT IS GOING TO HANDLE THE REQUEST, WHICH IS GOING TO INTERCEPT REQUEST AND RESPONSE TO THE TESTS
+
 import { server } from "./mocks/server.js"
 // Establish api mocking before all tests
 beforeAll(() => server.listen())
