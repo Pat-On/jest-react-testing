@@ -1,6 +1,16 @@
 import { createContext, useContext, useState, useMemo, useEffect } from "react";
 import { pricePerItem } from "../constants/constants.js";
+
 const OrderDetails = createContext();
+
+// helper function - to format currency
+function formatCurrency(amount) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+  }).format(amount);
+}
 
 // Custom hook - to check if we are inside a provide
 export function useOrderDetails() {
@@ -28,15 +38,16 @@ function calculateSubtotal(optionType, optionCounts) {
 }
 
 export function OrderDetailsProvider(props) {
-  const [optionCounts, setOptionsCount] = useState({
+  const [optionCounts, setOptionCounts] = useState({
     scoops: new Map(),
     toppings: new Map(),
   });
+  const zeroCurrency = formatCurrency(0);
 
   const [totals, setTotals] = useState({
-    scoops: 0,
-    toppings: 0,
-    grandTotal: 0,
+    scoops: zeroCurrency,
+    toppings: zeroCurrency,
+    grandTotal: zeroCurrency,
   });
 
   useEffect(() => {
@@ -45,23 +56,46 @@ export function OrderDetailsProvider(props) {
     const grandTotal = scoopsSubtotals + toppingsSubtotal;
 
     setTotals({
-      scoops: scoopsSubtotals,
-      toppings: toppingsSubtotal,
-      grandTotal,
+      scoops: formatCurrency(scoopsSubtotals),
+      toppings: formatCurrency(toppingsSubtotal),
+      grandTotal: formatCurrency(grandTotal),
     });
   }, [optionCounts]);
 
   // will memorize the values and block not needed recalculation
   const value = useMemo(() => {
     //setter function
-    function updateItemCount(itemName, newItemCounts, optionType) {
-      const newOptionCounts = { ...updateItemCount };
+    // function updateItemCount(itemName, newItemCounts, optionType) {
+    //   const newOptionCounts = { ...updateItemCount };
 
-      // updating option count
-      const optionCountsMap = optionCounts[optionType];
-      optionCountsMap.set(itemName, parseInt(newItemCounts));
+    //   // updating option count
+    //   const optionCountsMap = optionCounts[optionType];
+    //   optionCountsMap.set(itemName, parseInt(newItemCounts));
 
-      setOptionsCount(newOptionCounts);
+    //   setOptionsCount(newOptionCounts);
+    // }
+
+    function updateItemCount(itemName, newItemCount, optionType) {
+      // // get option Map and make a copy -shallow copy
+      // const newOptionCounts = { ...optionCounts };
+      // // reference
+      // const optionCountsMap = newOptionCounts[optionType];
+      // optionCountsMap.set(itemName, parseInt(newItemCount));
+      // // update state
+      // setOptionCounts(newOptionCounts);
+
+      // update with previous state
+      setOptionCounts((prevState) => {
+        // get option Map and make a copy
+        const { [optionType]: optionMap } = prevState;
+        const newOptionMap = new Map(optionMap);
+        // update the copied Map
+        newOptionMap.set(itemName, parseInt(newItemCount));
+        // create new object with the old optionCounts plus new map
+        const newOptionCounts = { ...prevState };
+        newOptionCounts[optionType] = newOptionMap;
+        return newOptionCounts;
+      });
     }
 
     //getter: object containing options counts for scoops and toppings
