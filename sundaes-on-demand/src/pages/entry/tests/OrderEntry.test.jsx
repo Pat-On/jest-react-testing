@@ -33,7 +33,7 @@ test("handles errors for scoops and toppings", async () => {
     // )
   );
 
-  render(<OrderEntry />);
+  render(<OrderEntry setOrderPhase={jest.fn()} />);
 
   //   in this configuration it is not going to await all just is going to await till first
   // error is going to be back!
