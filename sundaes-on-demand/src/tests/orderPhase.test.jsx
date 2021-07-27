@@ -26,7 +26,7 @@ test("order phases for happy path", async () => {
   // <<<<<<< IMPORTANT NOTE >>>>>>>>>
 
   // because this is different operation and she again is await it. toppings
-  const cherriesCheckbox = await screen.findByRole("button", {
+  const cherriesCheckbox = await screen.findByRole("checkbox", {
     name: "Cherries",
   });
   userEvent.click(cherriesCheckbox);
@@ -83,6 +83,8 @@ test("order phases for happy path", async () => {
   // click "new order" button on confirmation page
   const newOrderButton = screen.getByRole("button", { name: /new order/i });
   userEvent.click(newOrderButton);
+
+  
   // check that scoops and toppings subtotals have been reset
   const scoopsTotal = screen.getByText("Scoops total: $0.00");
   expect(scoopsTotal).toBeInTheDocument();
