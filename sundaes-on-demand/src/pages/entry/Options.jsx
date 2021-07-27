@@ -51,9 +51,7 @@ export default function Option({ optionType }) {
     <>
       <h2>{title}</h2>
       <p>{formatCurrency(pricePerItem[optionType])} each</p>
-      <p>
-        {title} total: {orderDetails.totals[optionType]}
-      </p>
+      <p>{`${title} total: ${orderDetails.totals[optionType]}`}</p>
       <Row>{optionItems}</Row>
     </>
   );
